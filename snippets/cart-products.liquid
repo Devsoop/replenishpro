@@ -12,26 +12,6 @@
 
 {% liquid
   assign block_settings = block.settings
-  capture tag_pricing_purchase_result
-    render 'tag-pricing-discount', mode: 'purchase'
-  endcapture
-  capture tag_pricing_subscription_result
-    render 'tag-pricing-discount', mode: 'subscription'
-  endcapture
-  assign tag_pricing_purchase_parts = tag_pricing_purchase_result | strip | split: '|'
-  assign purchase_pct = tag_pricing_purchase_parts[0] | plus: 0
-  assign purchase_on = false
-  if tag_pricing_purchase_parts[1] == '1'
-    assign purchase_on = true
-  endif
-  assign purchase_factor = 100 | minus: purchase_pct
-  assign tag_pricing_sub_parts = tag_pricing_subscription_result | strip | split: '|'
-  assign subscription_pct = tag_pricing_sub_parts[0] | plus: 0
-  assign subscription_on = false
-  if tag_pricing_sub_parts[1] == '1'
-    assign subscription_on = true
-  endif
-  assign subscription_factor = 100 | minus: subscription_pct
 %}
 
 <script
@@ -143,17 +123,6 @@
 
           <tbody role="rowgroup">
             {% for item in cart.items %}
-              {%- liquid
-                if item.selling_plan_allocation != null
-                  assign tag_pricing_discount_percent = subscription_pct
-                  assign tag_pricing_active = subscription_on
-                  assign tag_pricing_factor = subscription_factor
-                else
-                  assign tag_pricing_discount_percent = purchase_pct
-                  assign tag_pricing_active = purchase_on
-                  assign tag_pricing_factor = purchase_factor
-                endif
-              -%}
               <tr
                 role="row"
                 class="cart-items__table-row{% if item.parent_relationship.parent != null %} cart-items__nested-line{% endif %}{% unless item.unit_price_measurement %} cart-items__table-row--full-width-variants{% endunless %}"
@@ -297,20 +266,7 @@
 
                   <div class="cart-items__unit-price-wrapper">
                     <div>
-                      {%- liquid
-                        assign tag_line_tier_unit = false
-                        if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
-                          if item.final_line_price >= item.line_price
-                            assign tag_line_tier_unit = true
-                          endif
-                        endif
-                      -%}
-                      {% if tag_line_tier_unit %}
-                        <span class="visually-hidden">{{ 'content.price_sale' | t }}</span>
-                        <span>{{ item.original_price | times: tag_pricing_factor | divided_by: 100 | money }}</span>
-                        <span class="visually-hidden">{{ 'content.price_regular' | t }}</span>
-                        <s class="compare-at-price">{{ item.original_price | money }}</s>
-                      {% elsif item.original_price != item.final_price %}
+                      {% if item.original_price != item.final_price %}
                         <span class="visually-hidden">{{ 'content.price_sale' | t }}</span>
                         <span>{{ item.final_price | money }}</span>
                         <span class="visually-hidden">{{ 'content.price_regular' | t }}</span>
@@ -398,23 +354,7 @@
                   </div>
                 </td>
                 {%- liquid
-                  assign tag_line_tier = false
-                  if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
-                    if item.final_line_price >= item.line_price
-                      assign tag_line_tier = true
-                    endif
-                  endif
-                  if tag_line_tier
-                    if settings.currency_code_enabled_cart_items
-                      assign price = item.line_price | times: tag_pricing_factor | divided_by: 100 | money_with_currency
-                      assign tag_line_strike = item.line_price | money_with_currency
-                      assign unit_price = item.unit_price | times: tag_pricing_factor | divided_by: 100 | money_with_currency
-                    else
-                      assign price = item.line_price | times: tag_pricing_factor | divided_by: 100 | money
-                      assign tag_line_strike = item.line_price | money
-                      assign unit_price = item.unit_price | times: tag_pricing_factor | divided_by: 100 | money
-                    endif
-                  elsif settings.currency_code_enabled_cart_items
+                  if settings.currency_code_enabled_cart_items
                     assign price = item.final_line_price | money_with_currency
                     assign unit_price = item.unit_price | money_with_currency
                   else
@@ -427,9 +367,6 @@
                   role="cell"
                   headers="productTotal"
                 >
-                  {% if tag_line_tier %}
-                    <s class="compare-at-price">{{ tag_line_strike }}</s>
-                  {% endif %}
                   <text-component value="{{ price | strip_html }}">{{ price }}</text-component>
                   {%- if item.unit_price_measurement -%}
                     <div class="cart-items__price-unit cart-secondary-typography">
