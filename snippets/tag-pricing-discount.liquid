@@ -1,0 +1,33 @@
+{%- doc -%}
+  Resolves tag-based pricing for the logged-in customer. Outputs "percent|flag"
+  where flag is 1 if a tier matched.
+
+  @param {string} [mode] - "purchase" (default): only purchase tiers. "subscription": subscription tiers first, then purchase tiers if no match.
+{%- enddoc -%}
+{%- liquid
+  assign mode = mode | default: 'purchase'
+  assign out_pct = 0
+  assign out_active = 0
+  if settings.tag_pricing_enabled and customer
+    if mode == 'subscription'
+      capture sub_match
+        render 'tag-pricing-match-tiers', tiers_raw: settings.tag_pricing_subscription_tiers
+      endcapture
+      assign sub_parts = sub_match | strip | split: '|'
+      if sub_parts[1] == '1'
+        assign out_pct = sub_parts[0] | plus: 0
+        assign out_active = 1
+      endif
+    endif
+    if out_active == 0
+      capture pur_match
+        render 'tag-pricing-match-tiers', tiers_raw: settings.tag_pricing_tiers
+      endcapture
+      assign pur_parts = pur_match | strip | split: '|'
+      if pur_parts[1] == '1'
+        assign out_pct = pur_parts[0] | plus: 0
+        assign out_active = 1
+      endif
+    endif
+  endif
+-%}{{ out_pct }}|{{ out_active }}

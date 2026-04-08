@@ -2284,5 +2284,37 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "t:names.tag_pricing",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "tag_pricing_enabled",
+        "label": "t:settings.tag_pricing_enabled",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "tag_pricing_tiers",
+        "label": "t:settings.tag_pricing_tiers",
+        "info": "t:info.tag_pricing_tiers",
+        "default": "tier1==10\ntier2==20",
+        "visible_if": "{{ settings.tag_pricing_enabled }}"
+      },
+      {
+        "type": "textarea",
+        "id": "tag_pricing_subscription_tiers",
+        "label": "t:settings.tag_pricing_subscription_tiers",
+        "info": "t:info.tag_pricing_subscription_tiers",
+        "default": "tier1==15\ntier2==25",
+        "visible_if": "{{ settings.tag_pricing_enabled }}"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:content.tag_pricing_checkout",
+        "visible_if": "{{ settings.tag_pricing_enabled }}"
+      }
+    ]
   }
 ]

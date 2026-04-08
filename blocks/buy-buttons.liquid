@@ -33,6 +33,17 @@
       assign add_to_cart_text = 'products.product.unavailable' | t
     endif
   endif
+
+  capture tag_pricing_result
+    render 'tag-pricing-discount', mode: 'purchase'
+  endcapture
+  assign tag_pricing_parts = tag_pricing_result | strip | split: '|'
+  assign tag_pricing_discount_percent = tag_pricing_parts[0] | plus: 0
+  assign tag_pricing_active = false
+  if tag_pricing_parts[1] == '1'
+    assign tag_pricing_active = true
+  endif
+  assign tag_pricing_factor = 100 | minus: tag_pricing_discount_percent
 %}
 
 <span
@@ -134,6 +145,10 @@
           {%- if product.quantity_price_breaks_configured? and variant.quantity_price_breaks.size > 0 -%}
             {%- liquid
               assign use_currency = settings.currency_code_enabled_product_pages
+              assign vp_base = variant.price
+              if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                assign vp_base = vp_base | times: tag_pricing_factor | divided_by: 100
+              endif
             -%}
             <volume-pricing
               class="volume-pricing"
@@ -146,9 +161,9 @@
                   <span>{{ variant.quantity_rule.min }}+</span>
                   <span>
                     {%- if use_currency -%}
-                      {{- variant.price | money_with_currency | strip -}}
+                      {{- vp_base | money_with_currency | strip -}}
                     {%- else -%}
-                      {{- variant.price | money | strip -}}
+                      {{- vp_base | money | strip -}}
                     {%- endif -%}
                     /{{ 'content.each_abbreviation' | t -}}
                   </span>
@@ -161,14 +176,18 @@
                     else
                       assign row_class = 'volume-pricing__row volume-pricing__row--even'
                     endif
+                    assign pb_price = price_break.price
+                    if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                      assign pb_price = pb_price | times: tag_pricing_factor | divided_by: 100
+                    endif
                   -%}
                   <div class="{{ row_class }}">
                     <span>{{ price_break.minimum_quantity }}+</span>
                     <span>
                       {%- if use_currency -%}
-                        {{- price_break.price | money_with_currency | strip -}}
+                        {{- pb_price | money_with_currency | strip -}}
                       {%- else -%}
-                        {{- price_break.price | money | strip -}}
+                        {{- pb_price | money | strip -}}
                       {%- endif -%}
                       /{{ 'content.each_abbreviation' | t -}}
                     </span>
@@ -187,14 +206,18 @@
                         else
                           assign row_class = 'volume-pricing__row volume-pricing__row--even'
                         endif
+                        assign pb_price = price_break.price
+                        if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                          assign pb_price = pb_price | times: tag_pricing_factor | divided_by: 100
+                        endif
                       -%}
                       <div class="{{ row_class }}">
                         <span>{{ price_break.minimum_quantity }}+</span>
                         <span>
                           {%- if use_currency -%}
-                            {{- price_break.price | money_with_currency | strip -}}
+                            {{- pb_price | money_with_currency | strip -}}
                           {%- else -%}
-                            {{- price_break.price | money | strip -}}
+                            {{- pb_price | money | strip -}}
                           {%- endif -%}
                           /{{ 'content.each_abbreviation' | t -}}
                         </span>

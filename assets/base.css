@@ -4208,3 +4208,8 @@ product-recommendations:has([data-has-recommendations='false']) {
     translate: 0px var(--atc-destination, 0px);
   }
 }
+
+
+#appstle_subscription_widget0 .appstle_subscription_amount{
+  display: none;
+}

@@ -4,10 +4,26 @@
   assign product = closest.product
   assign block_settings = block.settings
 
+  capture tag_pricing_result
+    render 'tag-pricing-discount', mode: 'purchase'
+  endcapture
+  assign tag_pricing_parts = tag_pricing_result | strip | split: '|'
+  assign tag_pricing_discount_percent = tag_pricing_parts[0] | plus: 0
+  assign tag_pricing_active = false
+  if tag_pricing_parts[1] == '1'
+    assign tag_pricing_active = true
+  endif
+  assign tag_pricing_factor = 100 | minus: tag_pricing_discount_percent
+
+  assign price_min_cents = product.price_min
+  if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+    assign price_min_cents = price_min_cents | times: tag_pricing_factor | divided_by: 100
+  endif
+
   if settings.currency_code_enabled_product_cards
-    assign price_min = product.price_min | money_with_currency
+    assign price_min = price_min_cents | money_with_currency
   else
-    assign price_min = product.price_min | money
+    assign price_min = price_min_cents | money
   endif
 
   if product.price_varies

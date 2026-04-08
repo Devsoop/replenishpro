@@ -208,7 +208,8 @@
     "team_with_goal": "<h2>A team with a goal</h2>",
     "unable_to_accept_returns": "<p>We are unable to accept returns on certain items. These will be carefully marked before purchase.</p>",
     "uncompromising_standards": "<p>Uncompromising standards </p>",
-    "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>"
+    "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>",
+    "tag_pricing_checkout": "Create matching automatic discounts in Shopify Admin (Discounts) for each customer tag so checkout charges match storefront prices. Logged-out visitors see regular prices."
   },
   "info": {
     "actions_display_style": "Icons are always used on mobile",
@@ -233,7 +234,9 @@
     "video_autoplay": "Videos will be muted by default",
     "video_external": "Use a YouTube or Vimeo URL",
     "pills_usage": "Used for applied filters, discount codes, and search suggestions",
-    "media_type_info": "Features are populated from your menu links"
+    "media_type_info": "Features are populated from your menu links",
+    "tag_pricing_tiers": "One rule per line: customer_tag==percent_off (e.g. tier1==10). First matching tag wins.",
+    "tag_pricing_subscription_tiers": "When a subscription plan is selected (e.g. Appstle), these rules apply first. Same format as purchase. If empty, purchase rules apply. If no line matches the customer’s tags, purchase rules are used. Create matching automatic discounts in Admin for checkout."
   },
   "names": {
     "column": "Column",
@@ -421,6 +424,7 @@
     "subheading": "Subheading",
     "submit_button": "Submit button",
     "summary": "Summary",
+    "tag_pricing": "Customer tag pricing",
     "swatches": "Swatches",
     "testimonials": "Testimonials",
     "text": "Text",
@@ -1112,6 +1116,9 @@
     "submenu_size": "Submenu size",
     "success_color": "Success",
     "swatches": "Swatches",
+    "tag_pricing_enabled": "Enable tag-based discounts",
+    "tag_pricing_tiers": "Purchase / one-time tag rules",
+    "tag_pricing_subscription_tiers": "Subscription tag rules",
     "tertiary_font": "Tertiary font",
     // Generic label for text-related settings (content or color)
     "text": "Text",

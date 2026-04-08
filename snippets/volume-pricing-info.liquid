@@ -16,6 +16,17 @@
 {% enddoc %}
 
 {%- liquid
+  capture tag_pricing_result
+    render 'tag-pricing-discount', mode: 'purchase'
+  endcapture
+  assign tag_pricing_parts = tag_pricing_result | strip | split: '|'
+  assign tag_pricing_discount_percent = tag_pricing_parts[0] | plus: 0
+  assign tag_pricing_active = false
+  if tag_pricing_parts[1] == '1'
+    assign tag_pricing_active = true
+  endif
+  assign tag_pricing_factor = 100 | minus: tag_pricing_discount_percent
+
   assign has_quantity_rules = false
   if variant.quantity_rule.min > 1 or variant.quantity_rule.increment > 1 or variant.quantity_rule.max != null
     assign has_quantity_rules = true
@@ -100,7 +111,13 @@
               data-quantity="{{ min_qty }}"
             >
               <span class="volume-pricing-info__quantity">{{ min_qty }}+</span>
-              {%- capture price_text -%}{%- if use_currency -%}{{ variant.price | money_with_currency | strip }}/{{ 'content.each_abbreviation' | t }}{%- else -%}{{ variant.price | money | strip }}/{{ 'content.each_abbreviation' | t }}{%- endif -%}{%- endcapture -%}
+              {%- liquid
+                assign vpi_base = variant.price
+                if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                  assign vpi_base = vpi_base | times: tag_pricing_factor | divided_by: 100
+                endif
+              -%}
+              {%- capture price_text -%}{%- if use_currency -%}{{ vpi_base | money_with_currency | strip }}/{{ 'content.each_abbreviation' | t }}{%- else -%}{{ vpi_base | money | strip }}/{{ 'content.each_abbreviation' | t }}{%- endif -%}{%- endcapture -%}
               <span class="volume-pricing-info__price"
                 ><span class="volume-pricing-info__checkmark">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
                 {{- price_text | strip -}}
@@ -124,7 +141,13 @@
                 data-quantity="{{ price_break.minimum_quantity }}"
               >
                 <span class="volume-pricing-info__quantity">{{ price_break.minimum_quantity }}+</span>
-                {%- capture price_text -%}{%- if use_currency -%}{{ price_break.price | money_with_currency | strip }}/{{ 'content.each_abbreviation' | t }}{%- else -%}{{ price_break.price | money | strip }}/{{ 'content.each_abbreviation' | t }}{%- endif -%}{%- endcapture -%}
+                {%- liquid
+                  assign vpi_pb = price_break.price
+                  if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                    assign vpi_pb = vpi_pb | times: tag_pricing_factor | divided_by: 100
+                  endif
+                -%}
+                {%- capture price_text -%}{%- if use_currency -%}{{ vpi_pb | money_with_currency | strip }}/{{ 'content.each_abbreviation' | t }}{%- else -%}{{ vpi_pb | money | strip }}/{{ 'content.each_abbreviation' | t }}{%- endif -%}{%- endcapture -%}
                 <span class="volume-pricing-info__price"
                   ><span class="volume-pricing-info__checkmark">
                     {{- 'icon-checkmark.svg' | inline_asset_content -}}

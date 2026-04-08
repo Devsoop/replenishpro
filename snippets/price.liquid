@@ -8,28 +8,57 @@
 {%- enddoc -%}
 
 {%- liquid
+  capture tag_pricing_result
+    render 'tag-pricing-discount', mode: 'purchase'
+  endcapture
+  capture tag_pricing_subscription_result
+    render 'tag-pricing-discount', mode: 'subscription'
+  endcapture
+  assign tag_pricing_parts = tag_pricing_result | strip | split: '|'
+  assign tag_pricing_discount_percent = tag_pricing_parts[0] | plus: 0
+  assign tag_pricing_active = false
+  if tag_pricing_parts[1] == '1'
+    assign tag_pricing_active = true
+  endif
+  assign tag_pricing_factor = 100 | minus: tag_pricing_discount_percent
+
+  assign tag_pricing_sub_parts = tag_pricing_subscription_result | strip | split: '|'
+  assign tag_pricing_subscription_discount_percent = tag_pricing_sub_parts[0] | plus: 0
+  assign tag_pricing_subscription_active = false
+  if tag_pricing_sub_parts[1] == '1'
+    assign tag_pricing_subscription_active = true
+  endif
+
   assign show_unit_price = show_unit_price | default: false
   assign show_sale_price_first = show_sale_price_first | default: false
   assign selected_variant = product_resource.selected_or_first_available_variant
-  assign price = selected_variant.price
-  assign compare_at_price = selected_variant.compare_at_price
+  assign v_price = selected_variant.price
+  assign v_compare = selected_variant.compare_at_price | default: 0
 
   assign show_compare_price = false
-  if compare_at_price > price
+  assign display_compare_cents = v_compare
+  assign display_price_cents = v_price
+
+  if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
     assign show_compare_price = true
+    assign display_compare_cents = v_price
+    assign display_price_cents = v_price | times: tag_pricing_factor | divided_by: 100
+  elsif v_compare > v_price
+    assign show_compare_price = true
+    assign display_compare_cents = v_compare
+    assign display_price_cents = v_price
   endif
 
   if product_resource == blank
-    assign price = 1999
+    assign display_price_cents = 1999
+    assign display_compare_cents = 1999
+    assign show_compare_price = false
   endif
 
-  # Check if variant has volume pricing
   assign has_volume_pricing = null
   assign price_min = null
   assign price_max = null
 
-  # For product cards (collection/search pages), calculate min/max across all variants
-  # For product pages, only use the selected variant's pricing
   assign is_product_card = false
   if template.name != 'product'
     assign is_product_card = true
@@ -39,16 +68,22 @@
     assign price_min = product_resource.price_min
     assign price_max = product_resource.price_max
     assign has_volume_pricing = product_resource.quantity_price_breaks_configured? | default: false
+    if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+      assign price_min = price_min | times: tag_pricing_factor | divided_by: 100
+      assign price_max = price_max | times: tag_pricing_factor | divided_by: 100
+    endif
   else
-    # Product page: only use selected variant's pricing
     if selected_variant.quantity_price_breaks.size > 0
       assign has_volume_pricing = true
       assign price_min = selected_variant.quantity_price_breaks.last.price
       assign price_max = selected_variant.price
+      if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+        assign price_min = price_min | times: tag_pricing_factor | divided_by: 100
+        assign price_max = price_max | times: tag_pricing_factor | divided_by: 100
+      endif
     endif
   endif
 
-  # Determine if currency code should be shown
   assign use_currency = false
   if product.handle == product_resource.handle
     if settings.currency_code_enabled_product_pages
@@ -58,21 +93,35 @@
     assign use_currency = true
   endif
 
-  # Format all prices
   if use_currency
-    assign price = price | money_with_currency
-    assign compare_at_price = compare_at_price | money_with_currency
+    assign price = display_price_cents | money_with_currency
+    assign compare_at_price = display_compare_cents | money_with_currency
     assign price_min = price_min | money_with_currency
     assign price_max = price_max | money_with_currency
   else
-    assign price = price | money
-    assign compare_at_price = compare_at_price | money
+    assign price = display_price_cents | money
+    assign compare_at_price = display_compare_cents | money
     assign price_min = price_min | money
     assign price_max = price_max | money
   endif
 -%}
 
 <div ref="priceContainer">
+  {%- if template.name == 'product' and is_product_card == false and product_resource != blank -%}
+    <span
+      ref="tagPricingMeta"
+      class="visually-hidden"
+      aria-hidden="true"
+      data-base-price="{{ v_price }}"
+      data-base-compare="{{ v_compare }}"
+      data-purchase-pct="{{ tag_pricing_discount_percent }}"
+      data-purchase-on="{% if tag_pricing_active %}1{% else %}0{% endif %}"
+      data-subscription-pct="{{ tag_pricing_subscription_discount_percent }}"
+      data-subscription-on="{% if tag_pricing_subscription_active %}1{% else %}0{% endif %}"
+      data-use-currency="{% if use_currency %}1{% else %}0{% endif %}"
+      data-has-volume="{% if has_volume_pricing %}1{% else %}0{% endif %}"
+    ></span>
+  {%- endif -%}
   {% if has_volume_pricing %}
     {% comment %} Volume pricing display {% endcomment %}
     {% if show_compare_price %}
@@ -128,10 +177,14 @@
   {% endif %}
   {%- if selected_variant.unit_price and show_unit_price %}
     {%- liquid
+      assign unit_cents = selected_variant.unit_price
+      if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+        assign unit_cents = unit_cents | times: tag_pricing_factor | divided_by: 100
+      endif
       if use_currency
-        assign unit_price = selected_variant.unit_price | money_with_currency
+        assign unit_price = unit_cents | money_with_currency
       else
-        assign unit_price = selected_variant.unit_price | money
+        assign unit_price = unit_cents | money
       endif
     -%}
     {% render 'unit-price', price: unit_price, measurement: selected_variant.unit_price_measurement %}

@@ -3,6 +3,7 @@
 
   @param {number} price - The price to format (defaults to 0 if not provided)
   @param {string} [type] - Type of price formatting (defaults to 'regular', only 'per_item' has special behavior)
+  @param {number} [discount_percent] - Optional percent off (e.g. 10 for 10%) applied before formatting
 
   @example
   {% render 'format-price', price: variant.price %}
@@ -13,6 +14,11 @@
 {% liquid
   assign price_value = price | default: 0
   assign price_type = type | default: 'regular'
+  assign discount_pct = discount_percent | default: 0 | plus: 0
+  if discount_pct > 0 and discount_pct < 100
+    assign disc_factor = 100 | minus: discount_pct
+    assign price_value = price_value | times: disc_factor | divided_by: 100
+  endif
 
   assign show_currency = settings.currency_code_enabled_product_pages
 

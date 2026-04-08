@@ -1,0 +1,37 @@
+{%- doc -%}
+  Parses one tier block (tag==percent lines). Outputs "percent|flag" where flag is 1 if a line matched.
+  @param {string} tiers_raw - Newline-separated tier rules
+{%- enddoc -%}
+{%- liquid
+  assign out_pct = 0
+  assign out_active = 0
+  assign tiers_raw = tiers_raw | default: ''
+  if tiers_raw != blank
+    assign lines = tiers_raw | newline_to_br | split: '<br />'
+    for line in lines
+      assign line_stripped = line | strip
+      if line_stripped != blank
+        assign parts = line_stripped | split: '=='
+        if parts.size >= 2
+          assign tier_tag = parts.first | strip | downcase
+          assign tier_pct = parts.last | strip | plus: 0
+          if tier_pct > 0 and tier_pct < 100
+            assign matched_tag = false
+            for ctag in customer.tags
+              assign ctag_lower = ctag | downcase
+              if ctag_lower == tier_tag
+                assign matched_tag = true
+                break
+              endif
+            endfor
+            if matched_tag
+              assign out_pct = tier_pct
+              assign out_active = 1
+              break
+            endif
+          endif
+        endif
+      endif
+    endfor
+  endif
+-%}{{ out_pct }}|{{ out_active }}

@@ -3,6 +3,16 @@
 {% liquid
   assign items_in_cart = cart | line_items_for: product
   assign quick_order_form_id = 'QuickOrder-ProductForm-' | append: product.id | append: '-' | append: section.id
+  capture tag_pricing_result
+    render 'tag-pricing-discount', mode: 'purchase'
+  endcapture
+  assign tag_pricing_parts = tag_pricing_result | strip | split: '|'
+  assign tag_pricing_discount_percent = tag_pricing_parts[0] | plus: 0
+  assign tag_pricing_active = false
+  if tag_pricing_parts[1] == '1'
+    assign tag_pricing_active = true
+  endif
+  assign tag_pricing_factor = 100 | minus: tag_pricing_discount_percent
 %}
 
 <script
@@ -108,23 +118,42 @@
                     endfor
                   endif
 
-                  assign has_discount = false
+                  assign strike_base_before_tier = display_price
+                  assign display_price_after_tier = display_price
+                  if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                    assign display_price_after_tier = display_price | times: tag_pricing_factor | divided_by: 100
+                  endif
+
+                  assign has_compare_sale = false
                   if variant.compare_at_price > display_price
+                    assign has_compare_sale = true
+                  endif
+
+                  assign has_discount = false
+                  if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                    assign has_discount = true
+                  elsif has_compare_sale
                     assign has_discount = true
                   endif
 
                   capture display_price_formatted
-                    render 'format-price', price: display_price
+                    render 'format-price', price: display_price_after_tier
                   endcapture
 
                   capture display_price_per_item_formatted
-                    render 'format-price', price: display_price, type: 'per_item'
+                    render 'format-price', price: display_price_after_tier, type: 'per_item'
                   endcapture
 
                   if has_discount
-                    capture compare_at_price_formatted
-                      render 'format-price', price: variant.compare_at_price, type: 'compare_at'
-                    endcapture
+                    if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                      capture compare_at_price_formatted
+                        render 'format-price', price: strike_base_before_tier
+                      endcapture
+                    elsif has_compare_sale
+                      capture compare_at_price_formatted
+                        render 'format-price', price: variant.compare_at_price, type: 'compare_at'
+                      endcapture
+                    endif
                   endif
 
                   assign variant_display_name = variant.title
@@ -320,6 +349,13 @@
                     {% liquid
                       if variant_line_item
                         assign total_price = variant_line_item.original_line_price
+                        if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+                          if variant_line_item.final_line_price >= variant_line_item.line_price
+                            assign total_price = variant_line_item.line_price | times: tag_pricing_factor | divided_by: 100
+                          else
+                            assign total_price = variant_line_item.final_line_price
+                          endif
+                        endif
                       else
                         assign total_price = 0
                       endif
@@ -347,7 +383,18 @@
     {%- endform -%}
     {% liquid
       assign total_items_count = items_in_cart | sum: 'quantity' | default: 0
-      assign total_price_value = cart | line_items_for: product | sum: 'original_line_price'
+      assign total_price_value = 0
+      for qol_item in cart.items
+        if qol_item.product_id == product.id
+          assign qol_lp = qol_item.final_line_price
+          if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+            if qol_item.final_line_price >= qol_item.line_price
+              assign qol_lp = qol_item.line_price | times: tag_pricing_factor | divided_by: 100
+            endif
+          endif
+          assign total_price_value = total_price_value | plus: qol_lp
+        endif
+      endfor
     %}
     {% capture total_price %}{% render 'format-price', price: total_price_value %}{% endcapture %}
     <div class="quick-order-list-total">

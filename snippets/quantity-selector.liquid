@@ -106,6 +106,16 @@
       if product.quantity_price_breaks_configured? and variant.quantity_price_breaks.size > 0
         assign has_volume_pricing = true
       endif
+      capture tag_pricing_result
+        render 'tag-pricing-discount', mode: 'purchase'
+      endcapture
+      assign tag_pricing_parts = tag_pricing_result | strip | split: '|'
+      assign tag_pricing_discount_percent = tag_pricing_parts[0] | plus: 0
+      assign tag_pricing_active = false
+      if tag_pricing_parts[1] == '1'
+        assign tag_pricing_active = true
+      endif
+      assign tag_pricing_factor = 100 | minus: tag_pricing_discount_percent
     -%}
 
     {%- if has_volume_pricing -%}
@@ -115,7 +125,12 @@
         assign use_currency = settings.currency_code_enabled_product_pages
       -%}
       {%- capture price_breaks_json -%}
-        [{%- for price_break in variant.quantity_price_breaks -%}{%- unless forloop.first -%},{%- endunless -%}{%- if use_currency -%}{"quantity":{{ price_break.minimum_quantity }},"price":{{ price_break.price | money_with_currency | json }}}{%- else -%}{"quantity":{{ price_break.minimum_quantity }},"price":{{ price_break.price | money | json }}}{%- endif -%}{%- endfor -%}]
+        [{%- for price_break in variant.quantity_price_breaks -%}{%- unless forloop.first -%},{%- endunless -%}{%- liquid
+          assign qpj = price_break.price
+          if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+            assign qpj = qpj | times: tag_pricing_factor | divided_by: 100
+          endif
+        -%}{%- if use_currency -%}{"quantity":{{ price_break.minimum_quantity }},"price":{{ qpj | money_with_currency | json }}}{%- else -%}{"quantity":{{ price_break.minimum_quantity }},"price":{{ qpj | money | json }}}{%- endif -%}{%- endfor -%}]
       {%- endcapture -%}
 
       {%- liquid
@@ -133,12 +148,17 @@
             break
           endif
         endfor
+        assign variant_price_for_data = variant.price
+        if tag_pricing_active and tag_pricing_discount_percent > 0 and tag_pricing_discount_percent < 100
+          assign display_price = display_price | times: tag_pricing_factor | divided_by: 100
+          assign variant_price_for_data = variant_price_for_data | times: tag_pricing_factor | divided_by: 100
+        endif
       -%}
 
       <price-per-item
         class="price-per-item"
         data-variant-id="{{ variant.id }}"
-        data-variant-price="{%- if use_currency -%}{{ variant.price | money_with_currency | escape }}{%- else -%}{{ variant.price | money | escape }}{%- endif -%}"
+        data-variant-price="{%- if use_currency -%}{{ variant_price_for_data | money_with_currency | escape }}{%- else -%}{{ variant_price_for_data | money | escape }}{%- endif -%}"
         data-min-quantity="{{ variant.quantity_rule.min | default: 1 }}"
         data-price-breaks="{{ price_breaks_json | strip | escape }}"
         data-at-text="{{ 'content.price_at' | t | escape }}"

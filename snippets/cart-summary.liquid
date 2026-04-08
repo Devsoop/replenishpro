@@ -4,6 +4,56 @@
   @param {string} [accelerated_checkout_buttons_layout] - { 'vertical' } Forced layout of the additional checkout buttons, instead of relying on platform's layout.
   @param {string} [section_id] - The section ID for cart discount component.
 {%- enddoc -%}
+{%- liquid
+  capture tag_pricing_purchase_result
+    render 'tag-pricing-discount', mode: 'purchase'
+  endcapture
+  capture tag_pricing_subscription_result
+    render 'tag-pricing-discount', mode: 'subscription'
+  endcapture
+  assign tag_pricing_purchase_parts = tag_pricing_purchase_result | strip | split: '|'
+  assign purchase_pct = tag_pricing_purchase_parts[0] | plus: 0
+  assign purchase_on = false
+  if tag_pricing_purchase_parts[1] == '1'
+    assign purchase_on = true
+  endif
+  assign tag_pricing_sub_parts = tag_pricing_subscription_result | strip | split: '|'
+  assign subscription_pct = tag_pricing_sub_parts[0] | plus: 0
+  assign subscription_on = false
+  if tag_pricing_sub_parts[1] == '1'
+    assign subscription_on = true
+  endif
+
+  assign cart_display_total = cart.total_price
+  assign tag_cart_total_adjust = false
+  assign adjusted_items_subtotal = cart.items_subtotal_price
+  if settings.tag_pricing_enabled and customer and cart.cart_level_discount_applications.size == 0
+    assign tag_cart_total_adjust = true
+    assign adjusted_items_subtotal = 0
+    for cart_item in cart.items
+      if cart_item.final_line_price < cart_item.line_price
+        assign tag_cart_total_adjust = false
+        break
+      endif
+      if cart_item.selling_plan_allocation != null
+        assign eff_on = subscription_on
+        assign eff_pct = subscription_pct
+      else
+        assign eff_on = purchase_on
+        assign eff_pct = purchase_pct
+      endif
+      if eff_on and eff_pct > 0 and eff_pct < 100
+        assign line_factor = 100 | minus: eff_pct
+        assign adjusted_items_subtotal = adjusted_items_subtotal | plus: cart_item.line_price | times: line_factor | divided_by: 100
+      else
+        assign adjusted_items_subtotal = adjusted_items_subtotal | plus: cart_item.line_price
+      endif
+    endfor
+    if tag_cart_total_adjust
+      assign cart_display_total = cart.total_price | minus: cart.items_subtotal_price | plus: adjusted_items_subtotal
+    endif
+  endif
+-%}
 
 <div class="cart-totals">
   {% # We need to keep this node in place to allow morphing to work properly # %}
@@ -221,9 +271,9 @@
 
   {%- liquid
     if settings.currency_code_enabled_cart_total
-      assign total_price = cart.total_price | money_with_currency
+      assign total_price = cart_display_total | money_with_currency
     else
-      assign total_price = cart.total_price | money
+      assign total_price = cart_display_total | money
     endif
   -%}
 

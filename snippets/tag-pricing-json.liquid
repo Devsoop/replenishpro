@@ -1,0 +1,33 @@
+{%- liquid
+  capture tag_pricing_purchase_result
+    render 'tag-pricing-discount', mode: 'purchase'
+  endcapture
+  capture tag_pricing_subscription_result
+    render 'tag-pricing-discount', mode: 'subscription'
+  endcapture
+  assign tp_purchase_parts = tag_pricing_purchase_result | strip | split: '|'
+  assign tp_purchase_pct = tp_purchase_parts[0] | plus: 0
+  assign tp_purchase_on = false
+  if tp_purchase_parts[1] == '1'
+    assign tp_purchase_on = true
+  endif
+  assign tp_sub_parts = tag_pricing_subscription_result | strip | split: '|'
+  assign tp_sub_pct = tp_sub_parts[0] | plus: 0
+  assign tp_sub_on = false
+  if tp_sub_parts[1] == '1'
+    assign tp_sub_on = true
+  endif
+  assign tp_currency = cart.currency.iso_code | default: shop.currency
+-%}
+<script>
+  window.themeTagPricing = {
+    enabled: {{ settings.tag_pricing_enabled | json }},
+    discountPercent: {{ tp_purchase_pct }},
+    active: {{ tp_purchase_on | json }},
+    purchase: { discountPercent: {{ tp_purchase_pct }}, active: {{ tp_purchase_on | json }} },
+    subscription: { discountPercent: {{ tp_sub_pct }}, active: {{ tp_sub_on | json }} },
+    moneyFormat: {{ shop.money_format | json }},
+    moneyWithCurrencyFormat: {{ shop.money_with_currency_format | default: shop.money_format | json }},
+    currency: {{ tp_currency | json }}
+  };
+</script>
