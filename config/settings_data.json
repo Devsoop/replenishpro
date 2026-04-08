@@ -77,8 +77,8 @@
     "variant_button_radius": 14,
     "variant_button_width": "equal-width-buttons",
     "tag_pricing_enabled": true,
-    "tag_pricing_tiers": "standard trade==10\npremium trade==20\nvip==30",
-    "tag_pricing_subscription_tiers": "standard trade==15\npremium trade==25\nvip==40",
+    "tag_pricing_tiers": "standard trade==10\npremium trade==15\nvip==20",
+    "tag_pricing_subscription_tiers": "standard trade==15\npremium trade==20\nvip==30",
     "content_for_index": [],
     "blocks": {
       "14060646107696862457": {
