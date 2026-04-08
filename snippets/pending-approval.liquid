@@ -1,0 +1,53 @@
+{%- liquid
+  assign banner_text = ''
+  if customer
+    assign customer_tags = customer.tags | join: ',' | downcase
+    assign has_forms_tag = false
+    assign has_tier_1 = false
+    assign has_tier_2 = false
+    assign has_tier_3 = false
+  
+    if customer_tags contains 'shopify-forms-938012'
+      assign has_forms_tag = true
+    endif
+    if customer_tags contains 'standard trade'
+      assign has_tier_1 = true
+    endif
+    if customer_tags contains 'premium trade'
+      assign has_tier_2 = true
+    endif
+    if customer_tags contains 'vip'
+      assign has_tier_3 = true
+    endif
+
+    if has_forms_tag and has_tier_1 == false and has_tier_2 == false and has_tier_3 == false
+      assign banner_text = 'Your account is awaiting approval.'
+    endif
+  else
+    assign banner_text = 'Login to view B2B pricing'
+  endif
+-%}
+
+{%- if banner_text != blank -%}
+  <div class="pending-approval-banner" role="status" aria-live="polite">
+    <div class="page-width">
+      <p class="pending-approval-banner__text">{{ banner_text }}</p>
+    </div>
+  </div>
+  <style>
+    .pending-approval-banner {
+      background: black;
+      color: white;
+      text-align: center;
+    }
+
+    .pending-approval-banner__text {
+      margin: 0;
+      padding: 1rem 0;
+      font-size: 11px;
+      line-height: 1.4;
+      letter-spacing: 0.02rem;
+      font-weight: 600;
+    }
+  </style>
+{%- endif -%}

@@ -1,0 +1,34 @@
+{%- liquid
+  assign banner_text = ''
+  if customer
+    assign customer_tags = customer.tags | join: ',' | downcase
+    assign has_forms_tag = false
+    assign has_tier_1 = false
+    assign has_tier_2 = false
+    assign has_tier_3 = false
+
+    if customer_tags contains 'shopify-forms-938012'
+      assign has_forms_tag = true
+    endif
+    if customer_tags contains 'standard trade'
+      assign has_tier_1 = true
+    endif
+    if customer_tags contains 'premium trade'
+      assign has_tier_2 = true
+    endif
+    if customer_tags contains 'vip'
+      assign has_tier_3 = true
+    endif
+
+    if has_forms_tag and has_tier_1 == false and has_tier_2 == false and has_tier_3 == false
+      assign banner_text = 'B2B prices available after account approval'
+    endif
+  else
+    assign banner_text = 'Login to view B2B pricing'
+  endif
+-%}
+
+{%- if banner_text != blank -%}
+
+   <p class="pending-approval-price__text">{{ banner_text }}</p>
+{%- endif -%}
