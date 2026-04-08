@@ -4,6 +4,16 @@
   assign block_settings = block.settings
   assign product_resource = closest.product
   assign selected_variant = product_resource.selected_or_first_available_variant
+  assign apply_tag_pricing_for_block = block_settings.enable_tag_pricing
+  if apply_tag_pricing_for_block == nil
+    assign apply_tag_pricing_for_block = true
+  endif
+  if settings.tag_pricing_enabled == false
+    assign apply_tag_pricing_for_block = false
+  endif
+  if section.settings.enable_customer_tag_pricing == false
+    assign apply_tag_pricing_for_block = false
+  endif
 -%}
 
 {% liquid
@@ -50,7 +60,8 @@
   {% render 'price',
     show_unit_price: true,
     product_resource: product_resource,
-    show_sale_price_first: block_settings.show_sale_price_first
+    show_sale_price_first: block_settings.show_sale_price_first,
+    apply_tag_pricing: apply_tag_pricing_for_block
   %}
 
   {% if block_settings.show_tax_info %}
@@ -114,6 +125,14 @@
       "id": "show_tax_info",
       "label": "t:settings.show_tax_info",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tag_pricing",
+      "label": "t:settings.price_block_tag_pricing",
+      "info": "t:info.price_block_tag_pricing",
+      "default": true,
+      "visible_if": "{{ settings.tag_pricing_enabled }}"
     },
     {
       "type": "header",

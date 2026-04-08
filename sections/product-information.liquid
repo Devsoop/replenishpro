@@ -24,6 +24,15 @@
   {% content_for 'blocks' %}
 {% endcapture %}
 
+{% liquid
+  assign product_section_tag_pricing = section.settings.enable_customer_tag_pricing
+  if product_section_tag_pricing == nil
+    assign product_section_tag_pricing = true
+  endif
+  if settings.tag_pricing_enabled == false
+    assign product_section_tag_pricing = false
+  endif
+%}
 {% if section.settings.enable_sticky_add_to_cart %}
   {% liquid
     assign current_variant = product.selected_or_first_available_variant
@@ -113,7 +122,11 @@
         class="sticky-add-to-cart__price"
         data-testid="sticky-price-display"
       >
-        {% render 'price', product_resource: product, show_sale_price_first: true %}
+        {% render 'price',
+          product_resource: product,
+          show_sale_price_first: true,
+          apply_tag_pricing: product_section_tag_pricing
+        %}
       </div>
 
       <button
@@ -437,6 +450,18 @@
       "id": "enable_sticky_add_to_cart",
       "label": "t:settings.enable_sticky_add_to_cart",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:content.customer_tag_pricing_section"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_customer_tag_pricing",
+      "label": "t:settings.enable_customer_tag_pricing_section",
+      "info": "t:info.enable_customer_tag_pricing_section",
+      "default": true,
+      "visible_if": "{{ settings.tag_pricing_enabled }}"
     },
     {
       "type": "color_scheme",

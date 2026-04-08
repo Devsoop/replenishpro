@@ -5,28 +5,45 @@
   @param {product} product_resource - The product to render
   @param {boolean} [show_unit_price] - Whether to show the unit price
   @param {boolean} [show_sale_price_first] - Whether to show the sale price first
+  @param {boolean} [apply_tag_pricing] - When false, skip customer tag tiers for this render (default true). Still requires theme tag pricing enabled.
 {%- enddoc -%}
 
 {%- liquid
-  capture tag_pricing_result
-    render 'tag-pricing-discount', mode: 'purchase'
-  endcapture
-  capture tag_pricing_subscription_result
-    render 'tag-pricing-discount', mode: 'subscription'
-  endcapture
-  assign tag_pricing_parts = tag_pricing_result | strip | split: '|'
-  assign tag_pricing_discount_percent = tag_pricing_parts[0] | plus: 0
-  assign tag_pricing_active = false
-  if tag_pricing_parts[1] == '1'
-    assign tag_pricing_active = true
+  # apply_tag_pricing: nil => default on; false must stay false (| default: true wrongly turns false into true)
+  if apply_tag_pricing == nil
+    assign apply_tag_pricing = true
   endif
-  assign tag_pricing_factor = 100 | minus: tag_pricing_discount_percent
+  if settings.tag_pricing_enabled == false
+    assign apply_tag_pricing = false
+  endif
 
-  assign tag_pricing_sub_parts = tag_pricing_subscription_result | strip | split: '|'
-  assign tag_pricing_subscription_discount_percent = tag_pricing_sub_parts[0] | plus: 0
-  assign tag_pricing_subscription_active = false
-  if tag_pricing_sub_parts[1] == '1'
-    assign tag_pricing_subscription_active = true
+  if apply_tag_pricing
+    capture tag_pricing_result
+      render 'tag-pricing-discount', mode: 'purchase'
+    endcapture
+    capture tag_pricing_subscription_result
+      render 'tag-pricing-discount', mode: 'subscription'
+    endcapture
+    assign tag_pricing_parts = tag_pricing_result | strip | split: '|'
+    assign tag_pricing_discount_percent = tag_pricing_parts[0] | plus: 0
+    assign tag_pricing_active = false
+    if tag_pricing_parts[1] == '1'
+      assign tag_pricing_active = true
+    endif
+    assign tag_pricing_factor = 100 | minus: tag_pricing_discount_percent
+
+    assign tag_pricing_sub_parts = tag_pricing_subscription_result | strip | split: '|'
+    assign tag_pricing_subscription_discount_percent = tag_pricing_sub_parts[0] | plus: 0
+    assign tag_pricing_subscription_active = false
+    if tag_pricing_sub_parts[1] == '1'
+      assign tag_pricing_subscription_active = true
+    endif
+  else
+    assign tag_pricing_discount_percent = 0
+    assign tag_pricing_active = false
+    assign tag_pricing_factor = 100
+    assign tag_pricing_subscription_discount_percent = 0
+    assign tag_pricing_subscription_active = false
   endif
 
   assign show_unit_price = show_unit_price | default: false
@@ -107,7 +124,7 @@
 -%}
 
 <div ref="priceContainer">
-  {%- if template.name == 'product' and is_product_card == false and product_resource != blank -%}
+  {%- if apply_tag_pricing and template.name == 'product' and is_product_card == false and product_resource != blank -%}
     <span
       ref="tagPricingMeta"
       class="visually-hidden"

@@ -58,6 +58,7 @@
     "content_width": "Content width only applies when the section width is set to full width.",
     "copyright": "Copyright",
     "customer_account": "Customer account",
+    "customer_tag_pricing_section": "Customer tag pricing",
     "describe_the_video_for": "Describe the video for customers using screen readers. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#video-block)",
     "edit_empty_state_collection_in_theme_settings": "Edit empty state collection in [theme settings](/editor?context=theme&category=search)",
     "edit_logo_in_theme_settings": "Edit logo in [theme settings](/editor?context=theme&category=logo%20and%20favicon)",
@@ -236,7 +237,9 @@
     "pills_usage": "Used for applied filters, discount codes, and search suggestions",
     "media_type_info": "Features are populated from your menu links",
     "tag_pricing_tiers": "One rule per line: customer_tag==percent_off (e.g. tier1==10). First matching tag wins.",
-    "tag_pricing_subscription_tiers": "When a subscription plan is selected (e.g. Appstle), these rules apply first. Same format as purchase. If empty, purchase rules apply. If no line matches the customer’s tags, purchase rules are used. Create matching automatic discounts in Admin for checkout."
+    "tag_pricing_subscription_tiers": "When a subscription plan is selected (e.g. Appstle), these rules apply first. Same format as purchase. If empty, purchase rules apply. If no line matches the customer’s tags, purchase rules are used. Create matching automatic discounts in Admin for checkout.",
+    "price_block_tag_pricing": "Turn off to show standard Shopify prices in this block only. Customer tag pricing must be enabled in theme settings.",
+    "enable_customer_tag_pricing_section": "Applies to the main product price and sticky add-to-cart price on this product template. Customize each template (e.g. Default product vs. alternate) separately."
   },
   "names": {
     "column": "Column",
@@ -1003,6 +1006,8 @@
     "desktop_position": "Desktop position",
     "post_count": "Post count",
     "preset": "Preset",
+    "price_block_tag_pricing": "Apply customer tag pricing",
+    "enable_customer_tag_pricing_section": "Apply customer tag pricing on this template",
     "product_price_typography": "Product price typography",
     "product_title_typography": "Product title typography",
     "primary_button_background": "Primary button background",
