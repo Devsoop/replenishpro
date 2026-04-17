@@ -211,7 +211,7 @@
             "icon_EM6ahe": {
               "type": "icon",
               "settings": {
-                "icon": "eye",
+                "icon": "stopwatch",
                 "width": 32,
                 "link": "",
                 "open_in_new_tab": false
@@ -260,7 +260,7 @@
                 "text_ALqgrG": {
                   "type": "text",
                   "settings": {
-                    "text": "<h4>Intentional design</h4>",
+                    "text": "<p><strong>Save Time</strong></p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
@@ -285,7 +285,7 @@
                 "text_bwfYGz": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Everything we do starts with why</p>",
+                    "text": "<p>Subscribe once, customise any time, cancel anytime</p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
@@ -361,8 +361,9 @@
             "icon_patmBd": {
               "type": "icon",
               "settings": {
-                "icon": "heart",
-                "width": 32,
+                "icon": "none",
+                "image_upload": "shopify://shop_images/money-symbol-free-svg-file.png",
+                "width": 34,
                 "link": "",
                 "open_in_new_tab": false
               },
@@ -410,7 +411,7 @@
                 "text_RXJzPA": {
                   "type": "text",
                   "settings": {
-                    "text": "<h4>Made with care</h4>",
+                    "text": "<p><strong>Save Money</strong></p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
@@ -435,7 +436,7 @@
                 "text_AdDipg": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>We believe in building better</p>",
+                    "text": "<p>Take advantage of bundled pricing and discounts</p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
@@ -511,7 +512,7 @@
             "icon_EnGdcH": {
               "type": "icon",
               "settings": {
-                "icon": "silhouette",
+                "icon": "box",
                 "width": 32,
                 "link": "",
                 "open_in_new_tab": false
@@ -560,7 +561,7 @@
                 "text_TQzNNi": {
                   "type": "text",
                   "settings": {
-                    "text": "<h4>A team with a goal</h4>",
+                    "text": "<p><strong>Stay Stocked</strong></p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
@@ -585,7 +586,7 @@
                 "text_YKJxVY": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Real people making great products</p>",
+                    "text": "<p>Never run out of essential items, delivered monthly to your door</p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "center",
