@@ -876,6 +876,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
+                "image": "shopify://shop_images/UIS-Bundle-2_408ec4b1-e59d-4e77-a209-9dad4dbb501e.jpg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -898,7 +899,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<p>Plan Two</p>",
+                "text": "<p>Daily Chemicals<br/></p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -924,7 +925,7 @@
               "type": "text",
               "name": "t:names.description",
               "settings": {
-                "text": "<p>Feature description line<br/>Feature description line</p>",
+                "text": "<p>Lubricants, cleaners, sealants — the chemicals your workshop burns through every month. Bundled at 42% off, delivered before you run out.<br/></p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -950,7 +951,7 @@
               "type": "text",
               "name": "t:names.description",
               "settings": {
-                "text": "<h4><strong>$25 / month</strong></h4>",
+                "text": "<h4>£107 <strong>/ month</strong></h4>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
