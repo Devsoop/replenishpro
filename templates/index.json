@@ -702,6 +702,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
+                "image": "shopify://shop_images/UIS-Bundle-1_c5bd72af-1029-4d20-8b75-766893a70c9d.png",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "custom",
@@ -724,7 +725,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<p>Plan One</p>",
+                "text": "<p>Workshop Essentials<br/></p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -750,7 +751,7 @@
               "type": "text",
               "name": "t:names.description",
               "settings": {
-                "text": "<p>Feature description line<br/>Feature description line</p>",
+                "text": "<p>Most frequently used workshop consumables, bundled into discounted monthly packages. One less thing to think about</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -776,7 +777,7 @@
               "type": "text",
               "name": "t:names.description",
               "settings": {
-                "text": "<h4><strong>$50 / month</strong></h4>",
+                "text": "<h4>£268 <strong>/ month</strong></h4>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
