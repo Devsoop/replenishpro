@@ -1274,7 +1274,7 @@
           "type": "button",
           "name": "t:names.button",
           "settings": {
-            "label": "Customise Order.",
+            "label": "Customise Order",
             "link": "shopify://collections/all",
             "open_in_new_tab": false,
             "style_class": "button-secondary",
@@ -1326,6 +1326,7 @@
         "image_FMXGyP": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/49964511d674323e32d94717d8bf957166bfa0b9_d31db179-fffa-4625-9f94-e48b0047b7a6.png",
             "link": "",
             "image_ratio": "square",
             "width": "fill",
