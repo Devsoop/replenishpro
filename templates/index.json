@@ -1613,7 +1613,7 @@
           "type": "text",
           "name": "t:names.heading",
           "settings": {
-            "text": "<h3><strong>Style That Moves With You.</strong></h3>",
+            "text": "<h3>Still Not 100% Sure?</h3>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
@@ -1639,7 +1639,7 @@
           "type": "text",
           "name": "t:names.text",
           "settings": {
-            "text": "<p>Don’t just follow the trends—set them. From street-ready essentials to statement pieces, our newest collection is designed for those who refuse to blend in. Shop the look before it’s gone.</p>",
+            "text": "<p>Not sure which package is the best fit? Your dedicated workshop consultant is here to help. From bespoke stock planning to on-site efficiency optimisation, our experts ensure your workshop runs at peak performance</p>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
@@ -1665,7 +1665,7 @@
           "type": "button",
           "name": "t:names.button",
           "settings": {
-            "label": "Shop now",
+            "label": "CALL YOUR CONSULTANT",
             "link": "shopify://collections/all",
             "open_in_new_tab": false,
             "style_class": "button",
