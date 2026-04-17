@@ -986,7 +986,7 @@
               "name": "t:names.button",
               "settings": {
                 "label": "Shop now",
-                "link": "shopify://collections/shirt-collection",
+                "link": "https://replenishpro.myshopify.com/products_preview?preview_key=483982f8584ffc4a1447299d07e975f6",
                 "open_in_new_tab": false,
                 "style_class": "button-secondary",
                 "width": "custom",
@@ -1160,7 +1160,7 @@
               "name": "t:names.button",
               "settings": {
                 "label": "Shop now",
-                "link": "shopify://collections/lower-collection",
+                "link": "https://replenishpro.myshopify.com/products_preview?preview_key=64dd61b6b5ea236bc67f2370907abdbd",
                 "open_in_new_tab": false,
                 "style_class": "button-secondary",
                 "width": "custom",
