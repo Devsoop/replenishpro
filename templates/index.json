@@ -812,7 +812,7 @@
               "name": "t:names.button",
               "settings": {
                 "label": "Shop now",
-                "link": "shopify://collections/winter-collection",
+                "link": "https://replenishpro.myshopify.com/products_preview?preview_key=1e44d3ab9e947552890741089d072b5c",
                 "open_in_new_tab": false,
                 "style_class": "button-secondary",
                 "width": "custom",
