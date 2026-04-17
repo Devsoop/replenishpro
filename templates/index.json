@@ -1050,6 +1050,7 @@
               "type": "image",
               "name": "t:names.image",
               "settings": {
+                "image": "shopify://shop_images/UIS-Bundle-3_c9fe1749-ec19-4bf5-9f12-5063231357c8.jpg",
                 "link": "",
                 "image_ratio": "adapt",
                 "width": "fill",
@@ -1072,7 +1073,7 @@
               "type": "text",
               "name": "t:names.heading",
               "settings": {
-                "text": "<p>Plan 3</p>",
+                "text": "<p>Electrical Supplies</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -1098,7 +1099,7 @@
               "type": "text",
               "name": "t:names.description",
               "settings": {
-                "text": "<p>Feature description line<br/>Feature description line</p>",
+                "text": "<p>Cable ties, heatshrink connectors, batteries, contact cleaner — the small stuff that keeps jobs moving. Bundled at 42% off, delivered monthly.</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
@@ -1124,7 +1125,7 @@
               "type": "text",
               "name": "t:names.description",
               "settings": {
-                "text": "<h4><strong>$15 / month</strong></h4>",
+                "text": "<h4>£42<strong> / month</strong></h4>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
