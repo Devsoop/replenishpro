@@ -276,10 +276,6 @@
               },
               "blocks": {}
             },
-            "appstle_bundles_appstle_classic_bundle_Vjjtnc": {
-              "type": "shopify://apps/appstle-bundles/blocks/appstle-classic-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
-              "settings": {}
-            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -491,7 +487,6 @@
             "divider_VJhene",
             "appstle_subscription_appstle_subscription_product_page_widget_PcVamG",
             "variant_picker_R3rGDr",
-            "appstle_bundles_appstle_classic_bundle_Vjjtnc",
             "buy_buttons_eYQEYi",
             "text_aEtTtq",
             "accordion_iDrTJp"
