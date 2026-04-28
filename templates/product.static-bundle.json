@@ -259,12 +259,12 @@
               },
               "blocks": {}
             },
-            "appstle_subscription_appstle_subscription_product_page_widget_PcVamG": {
-              "type": "shopify://apps/appstle-subscription/blocks/appstle-subscription-product-page-widget/fe257d39-6f88-4f35-ab08-bd437e3aa94e",
-              "settings": {}
-            },
             "appstle_bundles_appstle_classic_bundle_XRRrt7": {
               "type": "shopify://apps/appstle-bundles/blocks/appstle-classic-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
+              "settings": {}
+            },
+            "appstle_subscription_appstle_subscription_product_page_widget_PcVamG": {
+              "type": "shopify://apps/appstle-subscription/blocks/appstle-subscription-product-page-widget/fe257d39-6f88-4f35-ab08-bd437e3aa94e",
               "settings": {}
             },
             "variant_picker_R3rGDr": {
@@ -489,8 +489,8 @@
             "judge_me_reviews_preview_badge_N7hRrf",
             "group_icgrde",
             "divider_VJhene",
-            "appstle_subscription_appstle_subscription_product_page_widget_PcVamG",
             "appstle_bundles_appstle_classic_bundle_XRRrt7",
+            "appstle_subscription_appstle_subscription_product_page_widget_PcVamG",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
             "text_aEtTtq",
