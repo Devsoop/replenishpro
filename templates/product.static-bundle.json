@@ -12,10 +12,6 @@
     "main": {
       "type": "product-information",
       "blocks": {
-        "appstle_bundles_appstle_classic_bundle_PrygqD": {
-          "type": "shopify://apps/appstle-bundles/blocks/appstle-classic-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
-          "settings": {}
-        },
         "media-gallery": {
           "type": "_product-media-gallery",
           "static": true,
@@ -149,6 +145,7 @@
                     "show_sale_price_first": true,
                     "show_installments": false,
                     "show_tax_info": false,
+                    "enable_tag_pricing": true,
                     "type_preset": "paragraph",
                     "width": "100%",
                     "alignment": "left",
@@ -212,6 +209,7 @@
                         "show_sale_price_first": true,
                         "show_installments": false,
                         "show_tax_info": false,
+                        "enable_tag_pricing": true,
                         "type_preset": "",
                         "width": "100%",
                         "alignment": "left",
@@ -263,6 +261,10 @@
             },
             "appstle_subscription_appstle_subscription_product_page_widget_PcVamG": {
               "type": "shopify://apps/appstle-subscription/blocks/appstle-subscription-product-page-widget/fe257d39-6f88-4f35-ab08-bd437e3aa94e",
+              "settings": {}
+            },
+            "appstle_bundles_appstle_classic_bundle_XRRrt7": {
+              "type": "shopify://apps/appstle-bundles/blocks/appstle-classic-bundle/8909921b-2d24-4d68-9b12-9d045d3dcb0a",
               "settings": {}
             },
             "variant_picker_R3rGDr": {
@@ -488,6 +490,7 @@
             "group_icgrde",
             "divider_VJhene",
             "appstle_subscription_appstle_subscription_product_page_widget_PcVamG",
+            "appstle_bundles_appstle_classic_bundle_XRRrt7",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
             "text_aEtTtq",
@@ -495,9 +498,6 @@
           ]
         }
       },
-      "block_order": [
-        "appstle_bundles_appstle_classic_bundle_PrygqD"
-      ],
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
@@ -505,6 +505,7 @@
         "limit_details_width": false,
         "gap": 48,
         "enable_sticky_add_to_cart": true,
+        "enable_customer_tag_pricing": true,
         "color_scheme": "",
         "padding-block-start": 0,
         "padding-block-end": 0
@@ -604,6 +605,7 @@
                 "show_sale_price_first": true,
                 "show_installments": false,
                 "show_tax_info": false,
+                "enable_tag_pricing": true,
                 "type_preset": "h6",
                 "width": "100%",
                 "alignment": "left",
