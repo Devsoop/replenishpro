@@ -1410,7 +1410,7 @@
           "name": "t:names.button",
           "settings": {
             "label": "Customise Order",
-            "link": "shopify://collections/all",
+            "link": "https://replenishpro.myshopify.com/apps/bundles/bb/51cfxzuuvj",
             "open_in_new_tab": false,
             "style_class": "button-secondary",
             "width": "fit-content",
