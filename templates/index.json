@@ -109,7 +109,7 @@
               "name": "t:names.button",
               "settings": {
                 "label": "Shop Now",
-                "link": "shopify://collections/all",
+                "link": "shopify://collections/build-your-own-bundle",
                 "open_in_new_tab": false,
                 "style_class": "button-secondary",
                 "width": "fit-content",
