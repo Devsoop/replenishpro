@@ -856,7 +856,7 @@
               "type": "button",
               "name": "t:names.button",
               "settings": {
-                "label": "Shop now",
+                "label": "Purchase Now",
                 "link": "https://replenishpro.myshopify.com/apps/bundles/bb/lqztzvfsrt",
                 "open_in_new_tab": false,
                 "style_class": "button-secondary",
@@ -1075,7 +1075,7 @@
               "type": "button",
               "name": "t:names.button",
               "settings": {
-                "label": "Shop now",
+                "label": "Purchase Now",
                 "link": "https://replenishpro.myshopify.com/apps/bundles/bb/oehvtjo8aa",
                 "open_in_new_tab": false,
                 "style_class": "button-secondary",
@@ -1294,7 +1294,7 @@
               "type": "button",
               "name": "t:names.button",
               "settings": {
-                "label": "Shop now",
+                "label": "Purchase Now",
                 "link": "https://replenishpro.myshopify.com/apps/bundles/bb/ndtfmevnsr",
                 "open_in_new_tab": false,
                 "style_class": "button-secondary",
